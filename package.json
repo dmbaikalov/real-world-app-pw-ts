@@ -1,0 +1,29 @@
+{
+	"name": "real-world-app-pw-ts",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "npx playwright test"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dmbaikalov/real-world-app-pw-ts.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/dmbaikalov/real-world-app-pw-ts/issues"
+	},
+	"homepage": "https://github.com/dmbaikalov/real-world-app-pw-ts#readme",
+	"devDependencies": {
+		"@biomejs/biome": "2.3.10",
+		"@playwright/test": "1.57.0",
+		"@types/node": "^25.0.2"
+	},
+	"dependencies": {
+		"dotenv": "^17.2.3",
+		"typescript": "^5.9.3"
+	}
+}
