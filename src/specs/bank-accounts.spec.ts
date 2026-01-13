@@ -1,33 +1,42 @@
 import { expect, Page } from "@playwright/test";
 import { test } from "../fixtures/fixtures";
+import { BankAccount } from "../types/bankAccount.types.ts";
 
-// test.describe
-test("Add a Bank Account", async ({ app }) => {
-    await app.loginPage.goto('/')
-    await app.loginPage.enterUserCredentials('Heath93', 's3cret');
+test.describe.configure({ mode: "serial" });
+test.describe("Bank Account Lifecycle", () => {
+  let bankAccountData: BankAccount;
+
+  test.beforeEach(async ({ app }) => {
+    await app.loginPage.goto("/");
+    await app.loginPage.enterUserCredentials(
+      process.env.TESTUSER!,
+      process.env.PASSWORD!
+    );
     await app.loginPage.clickSignIn();
     await app.wait(2000);
+  });
+  test("Add a Bank Account", async ({ app, generateBankData }) => {
+    const bankAccountData = generateBankData();
+
     await app.homePage.navigateToBankAccounts();
     await app.bankAccountsPage.clickCreateBankAccount();
-    await app.bankAccountsPage.fillBankAccountForm("My Savings1",'123123123','123123123'); // add variable
+    await app.bankAccountsPage.fillBankAccountForm(
+      bankAccountData.bankName,
+      bankAccountData.routingNumber,
+      bankAccountData.accountNumber
+    );
     await app.bankAccountsPage.saveBankAccount();
 
-    const isAdded = await app.bankAccountsPage.isBankAccountPresent("My Savings1");
-    expect(isAdded).toBeTruthy();
+    await expect(
+      app.bankAccountsPage.getBankRow(bankAccountData.bankName)
+    ).toBeVisible();
+  });
 
-});
-
-test("Remove a Bank Account", async ({ app }) => {
-	await app.loginPage.goto('/');
-    await app.loginPage.enterUserCredentials('Heath93', 's3cret');
-    await app.loginPage.clickSignIn();
-    await app.wait(2000);
+  test("Remove a Bank Account", async ({ app }) => {
     await app.homePage.navigateToBankAccounts();
-    await app.bankAccountsPage.deleteBankAccount("My Savings1");
-    const isPresent = await app.bankAccountsPage.isBankAccountPresent("My Savings1");
-    expect(isPresent).toBeFalsy();
-    // click remove bank account
-    // confirm removal
-    // expect bank account is removed
-
+    await app.bankAccountsPage.deleteBankAccount(bankAccountData!.bankName);
+    await expect(
+      app.bankAccountsPage.getBankRow(bankAccountData!.bankName)
+    ).toBeHidden();
+  });
 });
