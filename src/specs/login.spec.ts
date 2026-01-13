@@ -1,6 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import { test } from "../fixtures/fixtures";
-import { slc } from "../page_objects/login_page/selectors";
+import { createRandomUser } from "../utils/userDataGen.ts";
 import { slc as homeSlc } from "../page_objects/home_page/selectors";
 
 test.describe("Login Tests", () => {
@@ -29,13 +29,15 @@ test("Login with invalid credentials", async ({ app }) => {
 });
 
 test("Sign up a new user", async ({ app }) => {
+  const newUserData = createRandomUser();
+
   await app.loginPage.goto("/signup");
   await app.loginPage.fillSignUpForm(
-    "John",
-    "Doe",
-    "john.doe93",
-    "123123123",
-    "123123123"
+    newUserData.firstName,
+    newUserData.lastName,
+    newUserData.userName,
+    newUserData.password,
+    newUserData.confirmPassword
   );
   await app.loginPage.submitSignUp();
   await app.wait(2000);

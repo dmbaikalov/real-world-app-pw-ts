@@ -15,8 +15,9 @@ test.describe("Bank Account Lifecycle", () => {
     await app.loginPage.clickSignIn();
     await app.wait(2000);
   });
+
   test("Add a Bank Account", async ({ app, generateBankData }) => {
-    const bankAccountData = generateBankData();
+    bankAccountData = generateBankData();
 
     await app.homePage.navigateToBankAccounts();
     await app.bankAccountsPage.clickCreateBankAccount();
@@ -34,9 +35,14 @@ test.describe("Bank Account Lifecycle", () => {
 
   test("Remove a Bank Account", async ({ app }) => {
     await app.homePage.navigateToBankAccounts();
-    await app.bankAccountsPage.deleteBankAccount(bankAccountData!.bankName);
-    await expect(
-      app.bankAccountsPage.getBankRow(bankAccountData!.bankName)
-    ).toBeHidden();
+    await app.bankAccountsPage.deleteBankAccount(bankAccountData.bankName);
+
+    const deletedRow = app.bankAccountsPage.getBankRow(
+      bankAccountData.bankName
+    );
+
+    await expect(deletedRow).toContainText(
+      `${bankAccountData.bankName} (Deleted)`
+    );
   });
 });

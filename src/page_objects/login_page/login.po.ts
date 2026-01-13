@@ -2,6 +2,12 @@ import { expect, Locator } from "@playwright/test";
 import BasePage from "../base-page.po";
 
 export class LoginPage extends BasePage {
+  /**
+   *
+   *
+   * Locators
+   *
+   */
   private usernameInput: Locator = this.page.getByRole("textbox", {
     name: "Username",
   });
@@ -34,6 +40,12 @@ export class LoginPage extends BasePage {
     name: "Sign Up",
   });
 
+  /**
+   *
+   *
+   * Methods
+   *
+   */
   async enterUserCredentials(
     username: string,
     password: string
