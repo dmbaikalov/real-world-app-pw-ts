@@ -6,6 +6,3 @@ export const createRandomBankAccount = (): BankAccount => ({
   routingNumber: faker.finance.routingNumber(),
   accountNumber: faker.finance.accountNumber(12),
 });
-
-// You can add more generators here later
-// export const createRandomUser = () => { ... }
