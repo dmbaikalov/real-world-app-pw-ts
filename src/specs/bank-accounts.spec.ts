@@ -29,7 +29,7 @@ test.describe("Bank Account Lifecycle", () => {
 		await app.bankAccountsPage.saveBankAccount();
 
 		await expect(
-			app.bankAccountsPage.getBankRow({ bankName: bankAccountData.bankName }),
+			app.bankAccountsPage.getBankRow(bankAccountData.bankName),
 		).toBeVisible();
 	});
 
@@ -38,7 +38,7 @@ test.describe("Bank Account Lifecycle", () => {
 		await app.bankAccountsPage.deleteBankAccount(bankAccountData.bankName);
 
 		const deletedRow = app.bankAccountsPage.getBankRow(
-			{ bankName: bankAccountData.bankName },
+			bankAccountData.bankName,
 		);
 
 		await expect(deletedRow).toContainText(
