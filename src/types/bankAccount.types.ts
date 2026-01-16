@@ -1,5 +1,5 @@
 export interface BankAccount {
-  bankName: string;
-  routingNumber: string;
-  accountNumber: string;
+	bankName: string;
+	routingNumber: string;
+	accountNumber: string;
 }

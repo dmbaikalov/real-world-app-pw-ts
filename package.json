@@ -4,6 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
+		"format": "npx @biomejs/biome format --write",
+		"lint": "npx @biomejs/biome lint --write",
 		"test": "npx playwright test"
 	},
 	"repository": {

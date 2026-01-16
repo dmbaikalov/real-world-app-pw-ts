@@ -1,7 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import { test } from "../fixtures/fixtures";
 import { createRandomUser } from "../utils/userDataGen.ts";
-import { slc as homeSlc } from "../page_objects/home_page/selectors";
 
 test.describe("Login Tests", () => {
   test("Login with valid credentials", async ({ app }) => {
@@ -12,7 +11,7 @@ test.describe("Login Tests", () => {
     );
     await app.loginPage.clickSignIn();
 
-    await expect(app.homePage.page.locator(homeSlc.userNameDisplay)).toHaveText(
+    expect(await app.homePage.getDisplayedUserName()).toEqual(
       `@${process.env.TESTUSER!}`
     );
   });

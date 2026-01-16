@@ -5,8 +5,6 @@ import { BankAccounts } from "./bank_account";
 import { SignUp } from "./login_page/signUp.po";
 
 export class Application extends BasePage {
-
-
 	get loginPage() {
 		return new LoginPage(this.page);
 	}
@@ -22,7 +20,4 @@ export class Application extends BasePage {
 	get signUpPage() {
 		return new SignUp(this.page);
 	}
-
-	// framework from 0 ; js ;
-	// кайл симпсон - you don't know js; uncle bob - лекции;
 }

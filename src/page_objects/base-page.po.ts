@@ -1,7 +1,7 @@
-import { Locator, Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 
 export default class BasePage {
-	page: Page
+	page: Page;
 	constructor(page: Page) {
 		this.page = page;
 	}
@@ -13,14 +13,14 @@ export default class BasePage {
 	}
 
 	async wait(timeout: number): Promise<void> {
-		console.info(`>>> Waiting for timeout: ${timeout}`);
+		console.info(`>>> Waiting for timeout: ${timeout} second(s)`);
 
 		await this.page.waitForTimeout(timeout);
 	}
 
 	async getText(selector: Locator): Promise<string | null> {
 		console.info(`>>> Getting text from selector: ${selector}`);
-		
+
 		return await selector.textContent();
 	}
 

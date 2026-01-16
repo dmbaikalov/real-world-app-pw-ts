@@ -1,48 +1,48 @@
 import { expect, Page } from "@playwright/test";
 import { test } from "../fixtures/fixtures";
-import { BankAccount } from "../types/bankAccount.types.ts";
+import type { BankAccount } from "../types/bankAccount.types.ts";
 
 test.describe.configure({ mode: "serial" });
 test.describe("Bank Account Lifecycle", () => {
-  let bankAccountData: BankAccount;
+	let bankAccountData: BankAccount;
 
-  test.beforeEach(async ({ app }) => {
-    await app.loginPage.goto("/");
-    await app.loginPage.enterUserCredentials(
-      process.env.TESTUSER!,
-      process.env.PASSWORD!
-    );
-    await app.loginPage.clickSignIn();
-    await app.wait(2000);
-  });
+	test.beforeEach(async ({ app }) => {
+		await app.loginPage.goto("/");
+		await app.loginPage.enterUserCredentials(
+			process.env.TESTUSER!,
+			process.env.PASSWORD!,
+		);
+		await app.loginPage.clickSignIn();
+		await app.wait(2000);
+	});
 
-  test("Add a Bank Account", async ({ app, generateBankData }) => {
-    bankAccountData = generateBankData();
+	test("Add a Bank Account", async ({ app, generateBankData }) => {
+		bankAccountData = generateBankData();
 
-    await app.homePage.navigateToBankAccounts();
-    await app.bankAccountsPage.clickCreateBankAccount();
-    await app.bankAccountsPage.fillBankAccountForm(
-      bankAccountData.bankName,
-      bankAccountData.routingNumber,
-      bankAccountData.accountNumber
-    );
-    await app.bankAccountsPage.saveBankAccount();
+		await app.homePage.navigateToBankAccounts();
+		await app.bankAccountsPage.clickCreateBankAccount();
+		await app.bankAccountsPage.fillBankAccountForm(
+			bankAccountData.bankName,
+			bankAccountData.routingNumber,
+			bankAccountData.accountNumber,
+		);
+		await app.bankAccountsPage.saveBankAccount();
 
-    await expect(
-      app.bankAccountsPage.getBankRow(bankAccountData.bankName)
-    ).toBeVisible();
-  });
+		await expect(
+			app.bankAccountsPage.getBankRow({ bankName: bankAccountData.bankName }),
+		).toBeVisible();
+	});
 
-  test("Remove a Bank Account", async ({ app }) => {
-    await app.homePage.navigateToBankAccounts();
-    await app.bankAccountsPage.deleteBankAccount(bankAccountData.bankName);
+	test("Remove a Bank Account", async ({ app }) => {
+		await app.homePage.navigateToBankAccounts();
+		await app.bankAccountsPage.deleteBankAccount(bankAccountData.bankName);
 
-    const deletedRow = app.bankAccountsPage.getBankRow(
-      bankAccountData.bankName
-    );
+		const deletedRow = app.bankAccountsPage.getBankRow(
+			{ bankName: bankAccountData.bankName },
+		);
 
-    await expect(deletedRow).toContainText(
-      `${bankAccountData.bankName} (Deleted)`
-    );
-  });
+		await expect(deletedRow).toContainText(
+			`${bankAccountData.bankName} (Deleted)`,
+		);
+	});
 });
