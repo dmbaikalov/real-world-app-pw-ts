@@ -1,21 +1,21 @@
-import { Locator } from "@playwright/test";
+import { expect, Locator } from "@playwright/test";
 import BasePage from "../base-page.po";
 
 export default class HamburgerMenu extends BasePage {
-  get burgerMenuButton(): Locator {
+  get burgerMenuBtn(): Locator {
     return this.page.getByTestId("burger-menu-button");
   }
-  get sideNavHomeButton(): Locator {
+  get sideNavHomeBtn(): Locator {
     return this.page.getByTestId("sidenav-home");
   }
-  get sideNavMyAccountButton(): Locator {
+  get sideNavMyAccountBtn(): Locator {
     return this.page.getByTestId("sidenav-user-settings");
   }
-  get logoutButton(): Locator {
+  get logoutBtn(): Locator {
     return this.page.getByTestId("logout-button");
   }
 
-  get myAccountButton(): Locator {
+  get myAccountBtn(): Locator {
     return this.page.getByTestId("sidenav-user-settings");
   }
 
@@ -27,12 +27,18 @@ export default class HamburgerMenu extends BasePage {
     return this.page.getByTestId("sidenav-user-balance").textContent();
   }
 
-  async toggleBurgerMenu(): Promise<void> {
-    if (await this.sideNavHomeButton.isVisible()) {
-      console.info(`>>> Closing burger menu`);
-    } else {
-      console.info(`>>> Opening burger menu`);
-    }
-    await this.burgerMenuButton.click();
+  async openBurgerMenu(): Promise<void> {
+    if (await this.sideNavHomeBtn.isVisible()) return;
+
+    await this.burgerMenuBtn.click();
+    await expect(this.sideNavHomeBtn).toBeVisible();
   }
+  // async toggleBurgerMenu(): Promise<void> {
+  //   if (await this.sideNavHomeBtn.isVisible()) {
+  //     console.info(`>>> Closing burger menu`);
+  //   } else {
+  //     console.info(`>>> Opening burger menu`);
+  //   }
+  //   await this.burgerMenuBtn.click();
+  // }
 }
