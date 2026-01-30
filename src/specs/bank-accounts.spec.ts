@@ -4,45 +4,44 @@ import type { BankAccount } from "../types/bankAccount.types.ts";
 
 test.describe.configure({ mode: "serial" });
 test.describe("Bank Account Lifecycle", () => {
-	let bankAccountData: BankAccount;
+  let bankAccountData: BankAccount;
 
-	test.beforeEach(async ({ app }) => {
-		await app.loginPage.goto("/");
-		await app.loginPage.enterUserCredentials(
-			process.env.TESTUSER!,
-			process.env.PASSWORD!,
-		);
-		await app.loginPage.clickSignIn();
-		await app.wait(2000);
-	});
+  test.beforeEach(async ({ app }) => {
+    await app.loginPage.goto("/");
+    await app.loginPage.usernameInput.fill(process.env.TESTUSER!);
+    await app.loginPage.passwordInput.fill(process.env.PASSWORD!);
+    await app.loginPage.signInBtn.click();
+    await app.wait(2000);
+  });
 
-	test("Add a Bank Account", async ({ app, generateBankData }) => {
-		bankAccountData = generateBankData();
+  test("Add a Bank Account", async ({ app, generateBankData }) => {
+    bankAccountData = generateBankData();
 
-		await app.homePage.navigateToBankAccounts();
-		await app.bankAccountsPage.clickCreateBankAccount();
-		await app.bankAccountsPage.fillBankAccountForm(
-			bankAccountData.bankName,
-			bankAccountData.routingNumber,
-			bankAccountData.accountNumber,
-		);
-		await app.bankAccountsPage.saveBankAccount();
+    await app.homePage.hamburgerMenu.bankAccountsBtn.click();
+    await app.bankAccountsPage.createNewAccountBtn.click();
+    await app.bankAccountsPage.bankNameInput.fill(bankAccountData.bankName);
+    await app.bankAccountsPage.routingNumberInput.fill(
+      bankAccountData.routingNumber,
+    );
+    await app.bankAccountsPage.accountNumberInput.fill(
+      bankAccountData.accountNumber,
+    );
+    await app.bankAccountsPage.saveBtn.click();
 
-		await expect(
-			app.bankAccountsPage.getBankRow(bankAccountData.bankName),
-		).toBeVisible();
-	});
+    const bankAccountSlc = app.page.getByText(bankAccountData.bankName);
+    expect(bankAccountSlc).toBeVisible();
+  });
 
-	test("Remove a Bank Account", async ({ app }) => {
-		await app.homePage.navigateToBankAccounts();
-		await app.bankAccountsPage.deleteBankAccount(bankAccountData.bankName);
+  test("Remove a Bank Account", async ({ app }) => {
+    await app.homePage.hamburgerMenu.bankAccountsBtn.click();
+    await app.bankAccountsPage.deleteBankAccount(bankAccountData.bankName);
 
-		const deletedRow = app.bankAccountsPage.getBankRow(
-			bankAccountData.bankName,
-		);
+    const deletedRow = app.bankAccountsPage.getBankRow(
+      bankAccountData.bankName,
+    );
 
-		await expect(deletedRow).toContainText(
-			`${bankAccountData.bankName} (Deleted)`,
-		);
-	});
+    await expect(deletedRow).toContainText(
+      `${bankAccountData.bankName} (Deleted)`,
+    );
+  });
 });

@@ -1,4 +1,4 @@
-import { expect, type Locator } from "@playwright/test";
+import { type Locator } from "@playwright/test";
 import BasePage from "../base-page.po";
 
 export class LoginPage extends BasePage {
@@ -23,6 +23,6 @@ export class LoginPage extends BasePage {
   }
 
   get errorMsgTxt(): Promise<string | null> {
-    return this.page.getByTestId("error-message").textContent();
+    return this.page.getByTestId("signin-error").textContent();
   }
 }

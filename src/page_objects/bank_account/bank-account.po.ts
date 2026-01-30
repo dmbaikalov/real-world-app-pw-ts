@@ -1,12 +1,15 @@
-import { expect, type Locator } from "@playwright/test";
+import { type Locator } from "@playwright/test";
 import BasePage from "../base-page.po";
+import HamburgerMenu from "../page_sections/hamburger-menu.po";
 
 export class BankAccounts extends BasePage {
+  public hamburgerMenu = new HamburgerMenu(this.page);
+
   get listContainer(): Locator {
     return this.page.locator('[data-test="bankaccount-list"]');
   }
 
-  get createBtn(): Locator {
+  get createNewAccountBtn(): Locator {
     return this.page.locator('[data-test="bankaccount-new"]');
   }
 
@@ -32,16 +35,7 @@ export class BankAccounts extends BasePage {
     return this.page.getByRole("button", { name: "SAVE" });
   }
 
-  async isBankAccountPresent(bankAccountName: string): Promise<boolean> {
-    console.info(
-      `>>> Checking if bank account "${bankAccountName}" is present in the list`,
-    );
-    const bankAccountLocator = this.page.getByText(bankAccountName);
-    return await bankAccountLocator.isVisible();
-  }
-
   getBankRow(bankName: string): Locator {
-    console.info(`>>> Getting bank account row for: ${bankName}`);
     return this.listContainer.locator("li").filter({ hasText: bankName });
   }
 

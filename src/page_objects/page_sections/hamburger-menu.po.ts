@@ -1,4 +1,4 @@
-import { expect, Locator } from "@playwright/test";
+import { expect, type Locator } from "@playwright/test";
 import BasePage from "../base-page.po";
 
 export default class HamburgerMenu extends BasePage {
@@ -8,8 +8,8 @@ export default class HamburgerMenu extends BasePage {
   get sideNavHomeBtn(): Locator {
     return this.page.getByTestId("sidenav-home");
   }
-  get sideNavMyAccountBtn(): Locator {
-    return this.page.getByTestId("sidenav-user-settings");
+  get bankAccountsBtn(): Locator {
+    return this.page.getByTestId("sidenav-bankaccounts");
   }
   get logoutBtn(): Locator {
     return this.page.getByTestId("logout-button");

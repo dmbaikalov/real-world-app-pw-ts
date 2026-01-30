@@ -1,4 +1,4 @@
-import { expect, Locator } from "@playwright/test";
+import { type Locator } from "@playwright/test";
 import BasePage from "../base-page.po";
 
 export class SignupPage extends BasePage {
@@ -14,8 +14,8 @@ export class SignupPage extends BasePage {
     return this.page.getByRole("textbox", { name: "Last Name" });
   }
 
-  get signUpPasswordInput(): Locator {
-    return this.page.getByRole("textbox", { name: "Password" });
+  get passwordInput(): Locator {
+    return this.page.getByRole("textbox", { name: "Password" }).nth(0);
   }
 
   get confirmPasswordInput(): Locator {
