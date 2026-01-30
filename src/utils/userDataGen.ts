@@ -1,7 +1,15 @@
 import { faker } from "@faker-js/faker";
-import type { SignUpUserData } from "../types/userSignUpData.types";
+import type { TSignUpUserData } from "../types/userSignUpData.types";
 
-export const createRandomUser = (): SignUpUserData => {
+
+// get random user
+const getRandomUser = (randUser?: Partial<TSignUpUserData>): TSignUpUserData => {
+	const user = generateRandomUser();
+	return randUser ? {...randUser, ...user} : user;
+}
+getRandomUser({firstName: "John"});
+
+export const generateRandomUser = (): TSignUpUserData => {
 	const password = faker.internet.password();
 
 	return {

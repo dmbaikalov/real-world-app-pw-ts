@@ -17,16 +17,4 @@ export default class BasePage {
 
 		await this.page.waitForTimeout(timeout);
 	}
-
-	async getText(selector: Locator): Promise<string | null> {
-		console.info(`>>> Getting text from selector: ${selector}`);
-
-		return await selector.textContent();
-	}
-
-	async isLoaded(selector: Locator): Promise<boolean> {
-		console.info(`>>> Checking if ${selector} is loaded`);
-
-		return await selector.isVisible();
-	}
 }

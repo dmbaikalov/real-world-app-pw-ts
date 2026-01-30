@@ -2,6 +2,10 @@ import type { Locator } from "@playwright/test";
 import BasePage from "../base-page.po";
 
 export class HomePage extends BasePage {
+
+	get myAccountButton(): Locator {
+		return this.page.getByTestId("sidenav-user-settings");
+	}
 	private userNameDisplayed: Locator = this.page.getByTestId("sidenav-username");
 	private accountBalance: Locator = this.page.getByTestId(
 		"sidenav-user-balance",
@@ -27,20 +31,20 @@ export class HomePage extends BasePage {
 
     // Methods
 	async toggleBurgerMenu(): Promise<void> {
-		if (!this.sideNavHomeButton.isVisible()) {
-			console.info(`>>> Opening burger menu`);
-			await this.burgerMenuButton.click();
-		} else {
+		//
+		if (await this.sideNavHomeButton.isVisible()) {
 			console.info(`>>> Closing burger menu`);
-			await this.burgerMenuButton.click();
+		} else {
+			console.info(`>>> Opening burger menu`);
 		}
+		await this.burgerMenuButton.click();
 	}
-
+	//redo
 	async clickMyAccount(): Promise<void> {
 		console.info(`>>> Clicking My Account button from burger menu`);
 		await this.sideNavMyAccountButton.click();
 	}
-
+	
 	async clickLogout(): Promise<void> {
 		console.info(`>>> Clicking logout button from burger menu`);
 		await this.logoutButton.click();
@@ -51,11 +55,15 @@ export class HomePage extends BasePage {
 		await this.sideNavBankAccountsButton.click();
 	}
 
-	async getDisplayedUserName(): Promise<string | null> {
-		return await this.getText(this.userNameDisplayed);
+	get displayedUserName(): Promise<string | null> {
+		return this.getText(this.userNameDisplayed);
 	}
 
-	async getAccountBalance(): Promise<string | null> {
-		return await this.getText(this.accountBalance);
+	get userNameElement(): Locator {
+		return this.userNameDisplayed;
+	}
+
+	get accountBalance(): Promise<string | null> {
+		return this.getText(this.accountBalance);
 	}
 }

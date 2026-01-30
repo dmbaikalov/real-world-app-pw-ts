@@ -3,6 +3,7 @@ import { test } from "../fixtures/fixtures";
 import { createRandomUser } from "../utils/userDataGen.ts";
 
 test.describe("Login Tests", () => {
+  // test.step()
   test("Login with valid credentials", async ({ app }) => {
     await app.loginPage.goto("/");
     await app.loginPage.enterUserCredentials(
@@ -11,7 +12,7 @@ test.describe("Login Tests", () => {
     );
     await app.loginPage.clickSignIn();
 
-    expect(await app.homePage.getDisplayedUserName()).toEqual(
+    expect(app.homePage.userNameElement).toContainText(
       `@${process.env.TESTUSER!}`
     );
   });
@@ -21,6 +22,7 @@ test("Login with invalid credentials", async ({ app }) => {
   await app.loginPage.goto("/");
   await app.loginPage.enterUserCredentials("invalidUser", "invalidPassword");
   await app.loginPage.clickSignIn();
+  // validate state instead of wait
   await app.wait(2000);
 
   const errorText = await app.loginPage.getErrorMessage();

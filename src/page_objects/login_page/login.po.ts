@@ -46,6 +46,8 @@ export class LoginPage extends BasePage {
 	 * Methods
 	 *
 	 */
+
+
 	async enterUserCredentials(
 		username: string,
 		password: string,
@@ -92,6 +94,7 @@ export class LoginPage extends BasePage {
 		return await this.getText(errorLocator);
 	}
 
+	// add single object instead of multiple params
 	async fillSignUpForm(
 		firstName: string,
 		lastName: string,

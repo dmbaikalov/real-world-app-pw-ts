@@ -1,4 +1,4 @@
-export interface SignUpUserData {
+export type TSignUpUserData = {
 	firstName: string;
 	lastName: string;
 	userName: string;
