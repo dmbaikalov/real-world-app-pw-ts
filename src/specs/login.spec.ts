@@ -1,6 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import { test } from "../fixtures/fixtures";
-import { createRandomUser } from "../utils/userDataGen.ts";
+import { getRandomUser } from "../utils/userDataGen.ts";
 
 test.describe("Login Tests", () => {
   // test.step()
@@ -8,12 +8,12 @@ test.describe("Login Tests", () => {
     await app.loginPage.goto("/");
     await app.loginPage.enterUserCredentials(
       process.env.TESTUSER!,
-      process.env.PASSWORD!
+      process.env.PASSWORD!,
     );
     await app.loginPage.clickSignIn();
 
     expect(app.homePage.userNameElement).toContainText(
-      `@${process.env.TESTUSER!}`
+      `@${process.env.TESTUSER!}`,
     );
   });
 });
@@ -30,7 +30,7 @@ test("Login with invalid credentials", async ({ app }) => {
 });
 
 test("Sign up a new user", async ({ app }) => {
-  const newUserData = createRandomUser();
+  const newUserData = getRandomUser();
 
   await app.loginPage.goto("/signup");
   await app.loginPage.fillSignUpForm(
@@ -38,7 +38,7 @@ test("Sign up a new user", async ({ app }) => {
     newUserData.lastName,
     newUserData.userName,
     newUserData.password,
-    newUserData.confirmPassword
+    newUserData.confirmPassword,
   );
   await app.loginPage.submitSignUp();
   await app.wait(2000);
