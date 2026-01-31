@@ -44,7 +44,11 @@ jobs:
           BASE_URL: ${{ secrets.BASE_URL }}
 
       # 4. Uploading the Report
-      - name: Upload Artifact
+      - name: Fix Jekyll for Pages
+        if: always()
+        run: touch playwright-report/.nojekyll
+
+      - name: Upload Pages Artifact
         if: always()
         uses: actions/upload-pages-artifact@v4
         with:
