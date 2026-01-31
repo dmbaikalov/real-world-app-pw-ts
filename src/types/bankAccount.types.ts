@@ -1,5 +1,5 @@
-export interface BankAccount {
-	bankName: string;
-	routingNumber: string;
-	accountNumber: string;
-}
+export type TBankAccount = {
+  bankName: string;
+  routingNumber: string;
+  accountNumber: string;
+};

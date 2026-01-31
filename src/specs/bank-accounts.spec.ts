@@ -1,22 +1,17 @@
 import { expect, Page } from "@playwright/test";
 import { test } from "../fixtures/fixtures";
-import type { BankAccount } from "../types/bankAccount.types.ts";
+import type { TBankAccount } from "../types/bankAccount.types.ts";
+import { STORAGE_STATE_ADMIN } from "../../playwright.config.ts";
 
 test.describe.configure({ mode: "serial" });
-test.describe("Bank Account Lifecycle", () => {
-  let bankAccountData: BankAccount;
-
-  test.beforeEach(async ({ app }) => {
-    await app.loginPage.goto("/");
-    await app.loginPage.usernameInput.fill(process.env.TESTUSER!);
-    await app.loginPage.passwordInput.fill(process.env.PASSWORD!);
-    await app.loginPage.signInBtn.click();
-    await app.wait(2000);
-  });
+test.describe("Bank Account Lifecycle", { tag: "@admin" }, () => {
+  let bankAccountData: TBankAccount;
+  test.use({ storageState: STORAGE_STATE_ADMIN });
 
   test("Add a Bank Account", async ({ app, generateBankData }) => {
     bankAccountData = generateBankData();
 
+    await app.homePage.goto("/");
     await app.homePage.hamburgerMenu.bankAccountsBtn.click();
     await app.bankAccountsPage.createNewAccountBtn.click();
     await app.bankAccountsPage.bankNameInput.fill(bankAccountData.bankName);
@@ -33,6 +28,7 @@ test.describe("Bank Account Lifecycle", () => {
   });
 
   test("Remove a Bank Account", async ({ app }) => {
+    await app.homePage.goto("/bankaccounts");
     await app.homePage.hamburgerMenu.bankAccountsBtn.click();
     await app.bankAccountsPage.deleteBankAccount(bankAccountData.bankName);
 
