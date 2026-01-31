@@ -1,13 +1,8 @@
 name: Playwright Tests
-on:
-  push:
-    branches: main
-  pull_request:
-    branches: main
+on: [push, pull_request]
 
 jobs:
   e2e-tests:
-    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,37 +11,36 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: "yarn"
-          cache-dependency-path: "./app/yarn.lock"
 
-      # 1. Install App dependencies
-      - name: Install Application
-        working-directory: ./app
-        run: yarn install --frozen-lockfile
+      # 1. Get the App code if it's not already in your repo
+      - name: Clone and Install App
+        run: |
+          if [ ! -d "app" ]; then
+            git clone https://github.com/cypress-io/cypress-realworld-app.git app
+          fi
+          cd app
+          yarn install --frozen-lockfile
 
-      # 2. Install Test Framework dependencies
+      # 2. Install Playwright Framework (Root)
       - name: Install Playwright Framework
-        run: npm install
+        run: |
+          npm install
+          npx playwright install --with-deps
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
-      # 3. Start App & Run Tests
+      # 3. Start & Run
       - name: Run Playwright tests
         run: |
           cd app && yarn dev &
-          npx wait-on http://localhost:3000 --timeout 120000
+          npx wait-on http://localhost:3000 --timeout 180000
           npx playwright test
         env:
           TESTUSER: ${{ secrets.TESTUSER }}
           PASSWORD: ${{ secrets.PASSWORD }}
           BASE_URL: ${{ secrets.BASE_URL }}
 
-      # 4. Save Report
       - name: Upload Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report/
-          retention-days: 30
