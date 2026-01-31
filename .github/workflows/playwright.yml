@@ -1,5 +1,4 @@
 name: Playwright Tests
-
 on:
   push:
     branches: main
@@ -7,38 +6,47 @@ on:
     branches: main
 
 jobs:
-  test:
-    name: Run Playwright tests
+  e2e-tests:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
+          node-version: 18
+          cache: "yarn"
+          cache-dependency-path: "app/yarn.lock"
 
-      - name: Install dependencies
-        run: npm ci
+      # 1. Install App dependencies
+      - name: Install Application
+        working-directory: ./app
+        run: yarn install --frozen-lockfile
 
-      - name: Install Playwright browsers
+      # 2. Install Test Framework dependencies
+      - name: Install Playwright Framework
+        run: npm install
+
+      - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      # 3. Start App & Run Tests
       - name: Run Playwright tests
+        run: |
+          cd app && yarn dev &
+          npx wait-on http://localhost:3000 --timeout 120000
+          npx playwright test
         env:
           TESTUSER: ${{ secrets.TESTUSER }}
-          TESTPASSWORD: ${{ secrets.PASSWORD }}
+          PASSWORD: ${{ secrets.PASSWORD }}
           BASE_URL: ${{ secrets.BASE_URL }}
-        run: npx playwright test
 
-      - name: Upload Playwright HTML report
+      # 4. Save Report
+      - name: Upload Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
-          path: playwright-report
-          retention-days: 7
+          path: playwright-report/
+          retention-days: 30
