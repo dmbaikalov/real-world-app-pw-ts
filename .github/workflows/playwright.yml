@@ -12,7 +12,7 @@ jobs:
         with:
           node-version: 20
 
-      # 1. Get the App code if it's not already in your repo
+      # 1.Cloning the App
       - name: Clone and Install App
         run: |
           if [ ! -d "app" ]; then
@@ -21,13 +21,13 @@ jobs:
           cd app
           yarn install --frozen-lockfile
 
-      # 2. Install Playwright Framework (Root)
+      # 2. Install Playwright Framework
       - name: Install Playwright Framework
         run: |
           npm install
           npx playwright install --with-deps
 
-      # 3. Start & Run
+      # 3. Building the App and Running Tests
       - name: Run Playwright tests
         run: |
           cd app && yarn dev &
@@ -38,6 +38,7 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           BASE_URL: ${{ secrets.BASE_URL }}
 
+      # 4. Uploading the Report
       - name: Upload Report
         if: always()
         uses: actions/upload-artifact@v4
