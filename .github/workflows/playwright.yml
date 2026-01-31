@@ -31,7 +31,7 @@ jobs:
       - name: Run Playwright tests
         run: |
           cd app && yarn dev &
-          npx wait-on http://localhost:3000 --timeout 180000
+          npx wait-on http://localhost:3000 http://localhost:3001 --timeout 180000
           npx playwright test
         env:
           TESTUSER: ${{ secrets.TESTUSER }}
@@ -39,9 +39,13 @@ jobs:
           BASE_URL: ${{ secrets.BASE_URL }}
 
       # 4. Uploading the Report
-      - name: Upload Report
+      - name: Upload Artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v4
         with:
-          name: playwright-report
           path: playwright-report/
+
+      - name: Deploy to GitHub Pages
+        if: always()
+        id: deployment
+        uses: actions/deploy-pages@v4
