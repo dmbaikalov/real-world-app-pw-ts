@@ -42,6 +42,8 @@ jobs:
           TESTUSER: ${{ secrets.TESTUSER }}
           PASSWORD: ${{ secrets.PASSWORD }}
           BASE_URL: ${{ secrets.BASE_URL }}
+          ADMIN_USER: ${{ secrets.ADMIN_USER }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
 
       # 4. Uploading the Report
       - name: Fix Jekyll for Pages
