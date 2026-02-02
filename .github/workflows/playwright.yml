@@ -46,10 +46,6 @@ jobs:
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
 
       # 4. Uploading the Report
-      - name: Fix Jekyll for Pages
-        if: always()
-        run: touch playwright-report/.nojekyll
-
       - name: Upload Pages Artifact
         if: always()
         uses: actions/upload-pages-artifact@v4
