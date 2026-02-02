@@ -1,11 +1,11 @@
 import { test as base } from "@playwright/test";
 import { Application } from "../page_objects/app.po";
-import type { BankAccount } from "../types/bankAccount.types.ts";
+import type { TBankAccount } from "../types/bankAccount.types.ts";
 import { createRandomBankAccount } from "../utils/bankAccountDataGenerator.ts";
 
 type MyFixtures = {
 	app: Application;
-	generateBankData: (overrides?: Partial<BankAccount>) => BankAccount;
+	generateBankData: (overrides?: Partial<TBankAccount>) => TBankAccount;
 };
 
 export const test = base.extend<MyFixtures>({

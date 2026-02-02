@@ -14,13 +14,13 @@ setup("Authenticate users and save storage state", async ({ app }) => {
     return;
   }
 
-  // Make sure the auth directory exists
+  // Check if auth directory exists
   const authDir = path.dirname(STORAGE_STATE_USER);
   if (!fs.existsSync(authDir)) {
     fs.mkdirSync(authDir, { recursive: true });
   }
 
-  // --- 1. Default user ---
+  //Default user
   await app.loginPage.goto("/");
   await app.loginPage.usernameInput.fill(getEnvVarString("TESTUSER"));
   await app.loginPage.passwordInput.fill(getEnvVarString("PASSWORD"));
@@ -31,8 +31,8 @@ setup("Authenticate users and save storage state", async ({ app }) => {
   await app.page.context().storageState({ path: STORAGE_STATE_USER });
   console.log("Regular user state saved.");
 
-  // --- 2. Admin user ---
-  // Clear cookies before logging in as admin
+  // Admin user
+  // Clearing cookies before logging in as admin
   await app.page.context().clearCookies();
   await app.page.evaluate(() => window.localStorage.clear());
 
